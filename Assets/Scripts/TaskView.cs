@@ -1,52 +1,36 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 namespace Freehill.DailyScheduleApp
 {
-    [RequireComponent(typeof(RectTransform), typeof(Image))]
+    [RequireComponent(typeof(Image), typeof(LayoutElement))]
     public class TaskView : MonoBehaviour
     {
         [SerializeField] private TMP_Text _taskName;
+        [SerializeField] private TMP_Text _taskNotes;
 
-        private RectTransform _rectTransform;
         private Image _taskBackground;
+        private LayoutElement _taskLayout;
         private Task _task;
-        private float _initialYOffset = 0.0f;
 
-        /// <summary> The vertical screen space one minute of task time covers. </summary>
-        public const float UNITS_PER_MINUTE = 1.5f;
-
-        public float LocalHeight => _rectTransform.rect.height;
-        public float LocalPosition => _rectTransform.localPosition.y;
+        public Task Task => _task;
+        public DateTime StartTime => _task.StartTime;
 
         private void Awake()
         {
-            _rectTransform = GetComponent<RectTransform>();
             _taskBackground = GetComponent<Image>();
+            _taskLayout = GetComponent<LayoutElement>();
         }
 
-        public void Initialize(Task task, float initialYOffset) 
+        public void Initialize(Task task, float unitsPerMinute) 
         {
             _task = task;
-            _taskName.text = _task.Name;
+            _taskName.text = _task.Category;
+            _taskNotes.text = _task.Notes;
             _taskBackground.color = _task.Color;
-            _initialYOffset = initialYOffset;
-
-            TimeSpan duration = _task.EndTime - _task.StartTime;
-            Vector2 taskSize = _rectTransform.sizeDelta;
-            taskSize.y = (float)duration.TotalMinutes * UNITS_PER_MINUTE;
-            _rectTransform.sizeDelta = taskSize;
-        }
-
-        public void AlignRectToNow(float nowMarkerYOffset)
-        {
-            float elapsedTaskMinutes = (float)(DateTime.Now - _task.StartTime).TotalMinutes;
-            float elapsedTaskYOffset = elapsedTaskMinutes * UNITS_PER_MINUTE;
-            Vector2 taskPosition = _rectTransform.anchoredPosition;
-            taskPosition.y = _initialYOffset + nowMarkerYOffset - elapsedTaskYOffset;
-            _rectTransform.anchoredPosition = taskPosition;
+            _taskLayout.preferredHeight = _task.DurationMinutes * unitsPerMinute;
         }
     }
 }

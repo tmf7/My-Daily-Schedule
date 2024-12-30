@@ -1,0 +1,398 @@
+{
+	"TaskCategories":
+	[
+		{
+			"Name": "Morning Prep",
+			"ColorHex": "303030",
+			"Notes": "Shower, etc"
+		},
+		{
+			"Name": "Pick Meals",
+			"ColorHex": "664d08",
+			"Notes": "Recipe Dice, Cookbooks, Internet"
+		},
+		{
+			"Name": "Grocery Shop",
+			"ColorHex": "a17a0e",
+			"Notes": "Dekalb Farmers Market, Costco, Trader Joes, Kroger, Publix"
+		},
+		{
+			"Name": "Quick Breakfast",
+			"ColorHex": "faf605",
+			"Notes": ""
+		},
+		{
+			"Name": "Cook Breakfast",
+			"ColorHex": "d9a30f",
+			"Notes": ""
+		},
+		{
+			"Name": "Cook Dinner",
+			"ColorHex": "d9a30f",
+			"Notes": ""
+		},
+		{
+			"Name": "Exercise",
+			"ColorHex": "007d19",
+			"Notes": "Run, Climb, Hike, Kayak, Podcasts (news, tech, psych, stories)"
+		},
+		{
+			"Name": "Game Dev Work",
+			"ColorHex": "c96004",
+			"Notes": "Jira, Confluence, Git, Meetups (tue|wed|thu)"
+		},
+		{
+			"Name": "Game Dev Read",
+			"ColorHex": "ff8000",
+			"Notes": ""
+		},
+		{
+			"Name": "Family Dinner",
+			"ColorHex": "913f04",
+			"Notes": ""
+		},
+		{
+			"Name": "Home Dinner",
+			"ColorHex": "913f04",
+			"Notes": ""
+		},
+		{
+			"Name": "Dishes",
+			"ColorHex": "053df5",
+			"Notes": ""
+		},
+		{
+			"Name": "Housekeeping",
+			"ColorHex": "053df5",
+			"Notes": "Pay Bills, Laundry, Water Plants, Trash, Vacuum, Podcasts (news, tech, psych, stories)"
+		},
+		{
+			"Name": "Commute",
+			"ColorHex": "fa2605",
+			"Notes": ""
+		},
+		{
+			"Name": "Hebrew Study",
+			"ColorHex": "6041a3",
+			"Notes": "Duolingo, Read"
+		},
+		{
+			"Name": "Read Fiction",
+			"ColorHex": "4190a3",
+			"Notes": "SciFi, Fantasy, Dassa"
+		},
+		{
+			"Name": "Free Time",
+			"ColorHex": "555555",
+			"Notes": "Dates, Video Games, Read Anything, Housekeeping, Haircut"
+		}
+	],
+	"DailyTasks":
+	[
+		{
+			"Category": "Cook Breakfast",
+			"StartTime": "Sunday 9:30 AM",
+			"EndTime": "Sunday 10:30 AM"
+		},
+		{
+			"Category": "Housekeeping",
+			"StartTime": "Sunday 10:30 AM",
+			"EndTime": "Sunday 12:00 AM"
+		},
+		{
+			"Category": "Game Dev Read",
+			"StartTime": "Sunday 12:00 AM",
+			"EndTime": "Sunday 1:00 PM"
+		},
+		{
+			"Category": "Cook Dinner",
+			"StartTime": "Sunday 4:00 PM",
+			"EndTime": "Sunday 5:30 PM"
+		},
+		{
+			"Category": "Family Dinner",
+			"StartTime": "Sunday 5:30 PM",
+			"EndTime": "Sunday 8:30 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Sunday 8:30 PM",
+			"EndTime": "Sunday 9:00 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Sunday 10:00 PM",
+			"EndTime": "Sunday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Sunday 10:30 PM",
+			"EndTime": "Sunday 11:00 PM"
+		},
+		{
+			"Category": "Morning Prep",
+			"StartTime": "Monday 8:00 AM",
+			"EndTime": "Monday 9:00 AM"
+		},
+		{
+			"Category": "Quick Breakfast",
+			"StartTime": "Monday 9:00 AM",
+			"EndTime": "Monday 9:30 AM"
+		},
+		{
+			"Category": "Game Dev Read",
+			"StartTime": "Monday 9:30 AM",
+			"EndTime": "Monday 10:30 AM"
+		},
+		{
+			"Category": "Game Dev Work",
+			"StartTime": "Monday 10:30 AM",
+			"EndTime": "Monday 7:00 PM"
+		},
+		{
+			"Category": "Cook Dinner",
+			"StartTime": "Monday 7:00 PM",
+			"EndTime": "Monday 8:30 PM"
+		},
+		{
+			"Category": "Home Dinner",
+			"StartTime": "Monday 8:30 PM",
+			"EndTime": "Monday 9:30 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Monday 9:30 PM",
+			"EndTime": "Monday 10:00 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Monday 10:00 PM",
+			"EndTime": "Monday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Monday 10:30 PM",
+			"EndTime": "Monday 11:00 PM"
+		},
+		{
+			"Category": "Morning Prep",
+			"StartTime": "Tuesday 8:00 AM",
+			"EndTime": "Tuesday 9:00 AM"
+		},
+		{
+			"Category": "Quick Breakfast",
+			"StartTime": "Tuesday 9:00 AM",
+			"EndTime": "Tuesday 9:30 AM"
+		},
+		{
+			"Category": "Game Dev Read",
+			"StartTime": "Tuesday 9:30 AM",
+			"EndTime": "Tuesday 10:30 AM"
+		},
+		{
+			"Category": "Game Dev Work",
+			"StartTime": "Tuesday 10:30 AM",
+			"EndTime": "Tuesday 6:30 PM"
+		},
+		{
+			"Category": "Exercise",
+			"StartTime": "Tuesday 6:30 PM",
+			"EndTime": "Tuesday 8:30 PM"
+		},
+		{
+			"Category": "Home Dinner",
+			"StartTime": "Tuesday 8:30 PM",
+			"EndTime": "Tuesday 9:30 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Tuesday 9:30 PM",
+			"EndTime": "Tuesday 10:00 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Tuesday 10:00 PM",
+			"EndTime": "Tuesday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Tuesday 10:30 PM",
+			"EndTime": "Tuesday 11:00 PM"
+		},
+		{
+			"Category": "Morning Prep",
+			"StartTime": "Wednesday 8:00 AM",
+			"EndTime": "Wednesday 9:00 AM"
+		},
+		{
+			"Category": "Quick Breakfast",
+			"StartTime": "Wednesday 9:00 AM",
+			"EndTime": "Wednesday 9:30 AM"
+		},
+		{
+			"Category": "Game Dev Read",
+			"StartTime": "Wednesday 9:30 AM",
+			"EndTime": "Wednesday 10:30 AM"
+		},
+		{
+			"Category": "Game Dev Work",
+			"StartTime": "Wednesday 10:30 AM",
+			"EndTime": "Wednesday 7:00 PM"
+		},
+		{
+			"Category": "Cook Dinner",
+			"StartTime": "Wednesday 7:00 PM",
+			"EndTime": "Wednesday 8:30 PM"
+		},
+		{
+			"Category": "Home Dinner",
+			"StartTime": "Wednesday 8:30 PM",
+			"EndTime": "Wednesday 9:30 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Wednesday 9:30 PM",
+			"EndTime": "Wednesday 10:00 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Wednesday 10:00 PM",
+			"EndTime": "Wednesday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Wednesday 10:30 PM",
+			"EndTime": "Wednesday 11:00 PM"
+		},
+		{
+			"Category": "Morning Prep",
+			"StartTime": "Thursday 8:00 AM",
+			"EndTime": "Thursday 9:00 AM"
+		},
+		{
+			"Category": "Quick Breakfast",
+			"StartTime": "Thursday 9:00 AM",
+			"EndTime": "Thursday 9:30 AM"
+		},
+		{
+			"Category": "Game Dev Read",
+			"StartTime": "Thursday 9:30 AM",
+			"EndTime": "Thursday 10:30 AM"
+		},
+		{
+			"Category": "Game Dev Work",
+			"StartTime": "Thursday 10:30 AM",
+			"EndTime": "Thursday 6:30 PM"
+		},
+		{
+			"Category": "Exercise",
+			"StartTime": "Thursday 6:30 PM",
+			"EndTime": "Thursday 8:30 PM"
+		},
+		{
+			"Category": "Home Dinner",
+			"StartTime": "Thursday 8:30 PM",
+			"EndTime": "Thursday 9:30 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Thursday 9:30 PM",
+			"EndTime": "Thursday 10:00 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Thursday 10:00 PM",
+			"EndTime": "Thursday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Thursday 10:30 PM",
+			"EndTime": "Thursday 11:00 PM"
+		},
+		{
+			"Category": "Morning Prep",
+			"StartTime": "Friday 8:00 AM",
+			"EndTime": "Friday 9:00 AM"
+		},
+		{
+			"Category": "Quick Breakfast",
+			"StartTime": "Friday 9:00 AM",
+			"EndTime": "Friday 9:30 AM"
+		},
+		{
+			"Category": "Game Dev Read",
+			"StartTime": "Friday 9:30 AM",
+			"EndTime": "Friday 10:30 AM"
+		},
+		{
+			"Category": "Game Dev Work",
+			"StartTime": "Friday 10:30 AM",
+			"EndTime": "Friday 7:00 PM"
+		},
+		{
+			"Category": "Home Dinner",
+			"StartTime": "Friday 8:30 PM",
+			"EndTime": "Friday 9:30 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Friday 9:30 PM",
+			"EndTime": "Friday 10:00 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Friday 10:00 PM",
+			"EndTime": "Friday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Friday 10:30 PM",
+			"EndTime": "Friday 11:00 PM"
+		},
+		{
+			"Category": "Exercise",
+			"StartTime": "Saturday 9:30 AM",
+			"EndTime": "Saturday 12:30 PM"
+		},
+		{
+			"Category": "Morning Prep",
+			"StartTime": "Saturday 12:30 PM",
+			"EndTime": "Saturday 1:30 PM"
+		},
+		{
+			"Category": "Pick Meals",
+			"StartTime": "Saturday 2:00 PM",
+			"EndTime": "Saturday 2:30 PM"
+		},
+		{
+			"Category": "Grocery Shop",
+			"StartTime": "Saturday 2:30 PM",
+			"EndTime": "Saturday 4:30 PM"
+		},
+		{
+			"Category": "Cook Dinner",
+			"StartTime": "Saturday 6:30 PM",
+			"EndTime": "Saturday 8:00 PM"
+		},
+		{
+			"Category": "Home Dinner",
+			"StartTime": "Saturday 8:00 PM",
+			"EndTime": "Saturday 9:00 PM"
+		},
+		{
+			"Category": "Dishes",
+			"StartTime": "Saturday 9:00 PM",
+			"EndTime": "Saturday 9:30 PM"
+		},
+		{
+			"Category": "Hebrew Study",
+			"StartTime": "Saturday 10:00 PM",
+			"EndTime": "Saturday 10:30 PM"
+		},
+		{
+			"Category": "Read Fiction",
+			"StartTime": "Saturday 10:30 PM",
+			"EndTime": "Saturday 11:00 PM"
+		}
+	]
+}

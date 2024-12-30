@@ -1,91 +1,151 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Android;
 
 namespace Freehill.DailyScheduleApp
 {
     public class TaskManager : MonoBehaviour
     {
-        [SerializeField] private TaskView _taskViewPrefab; 
-        [SerializeField] private float _tickIntervalSeconds = 1.0f;
+        [SerializeField] private TaskView _taskViewPrefab;
+        [SerializeField] private RectTransform _tasksContentRectTransform;
         [SerializeField] private RectTransform _nowMarkerRectTransform;
+        [SerializeField] private float _updateIntervalSeconds = 1.0f;
+        [SerializeField] private float _unitsPerMinute = 1.5f;
 
+        private List<Task> _allTasks = new List<Task>();
         private List<TaskView> _activeTaskViews = new List<TaskView>();
+
+        private const string DAILY_SCHEDULE_FILENAME = "MyDailySchedule.json";
+        private const string FREE_TIME_CATEGORY = "Free Time";
 
         private void Awake()
         {
-            DateTime now = DateTime.Now;
-            float screenYOffset = 0.0f;
-            // TODO: =====SPAWN ALGORITHM======
-            // get the first task that overlaps NOW (if any),
-            // then spawn it,
-            // then check if screen is filled,
-            // if not, find the next task that abuts the current task (if any) 
-            // then spawn it, and repeat
-            // if no task abuts the current task (or next task) then insert a gray-colored "Free Time" task to fills gaps
-            // =================================
+            string dailySchedulePath = Path.Combine(Application.persistentDataPath, DAILY_SCHEDULE_FILENAME);
+            string fileJson = File.ReadAllText(dailySchedulePath);
+            var dailySchedule = JsonUtility.FromJson<DailySchedule>(fileJson);
 
-            // TODO: locate the DailySchedule.json file on disk (NOT in StreamingAssets, or PersistentDataPath, or DataPath, just in external android #Files)
-
-            // https://discussions.unity.com/t/how-can-i-browse-files-on-android-outside-of-the-unity-app-folder/178021
-            // Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            // https://learn.microsoft.com/en-us/dotnet/api/android.os.environment.getexternalstoragepublicdirectory?view=net-android-34.0&viewFallbackFrom=xamarin-android-sdk-12
-            // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/AndroidJavaClass.html
-            // https://developer.android.com/reference/android/os/Environment#getExternalStoragePublicDirectory(java.lang.String)
-            // https://developer.android.com/reference/java/io/FileReader#FileReader(java.io.File)
-            string fileJson = "bob";
-            var dailyScheduleJSON = JsonUtility.FromJson<DailySchedule>(fileJson);
-
-
-            // TODO: only spawn those that will cover the screen
-            // TODO: account for tasks prior to NOW-overlap which may be needed for screen coverage (ie: a series of short-duration tasks and a low now-marker)
-            foreach (TaskJSON taskJSON in dailyScheduleJSON.taskJSONs) 
-            {
-                var task = new Task(taskJSON);
-                if (task.Intersects(now)) 
-                { 
-                    TaskView taskView = Instantiate(_taskViewPrefab, transform);
-                    taskView.Initialize(task, screenYOffset);
-                    taskView.AlignRectToNow(_nowMarkerRectTransform.anchoredPosition.y);
-                    // TODO: check screencoverage, if sufficient, then stop
-                    screenYOffset += taskView.LocalHeight; // FIXME(?): base the root-offset on heights, not screen position of rects
-                }
-
-            }
-            
+            FillTasks(dailySchedule);
         }
 
-        //private string GetAndroidExternalStoragePath()
-        //{
-        //    string path = string.Empty;
-        //    try
-        //    {
-        //        var javaClass = new AndroidJavaClass("android.os.Environment");
-        //        path = javaClass.CallStatic<AndroidJavaObject>("getExternalStorageDirectory").Call<string>("getAbsolutePath");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.Log(e.Message);
-        //    }
+        /// <summary> Enforces task order by StartTime, and fills gaps in schedule with "Free Time" tasks to avoid view discontinuities </summary>
+        private void FillTasks(DailySchedule dailySchedule)
+        {
+            foreach (TaskJSON taskJSON in dailySchedule.DailyTasks) 
+            {
+                TaskCategory category = dailySchedule.TaskCategories.FirstOrDefault(category => category.Name == taskJSON.Category);
 
-        //    return path;
-        //}
+                if (category != null)
+                {
+                    var task = new Task(category, taskJSON);
+                    if (task.HasValidTimes)
+                    {
+                        _allTasks.Add(task);
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Task Category not found: [{taskJSON.Category}]");
+                }
+            }
+
+            _allTasks = _allTasks.OrderBy(task => task.StartTime).ToList();
+
+            // fill time gaps, don't corrupt iteration
+            // DEBUG: assumes a TaskCategory exists in MyDailySchedule.json with the value of FREE_TIME_CATEGORY (eg: "Free Time")
+            TaskCategory freeTimeCategory = dailySchedule.TaskCategories.FirstOrDefault(category => category.Name == FREE_TIME_CATEGORY);
+            var freeTimeTasks = new List<Task>();
+
+            for (int i = 0; i < _allTasks.Count - 1; i++) 
+            {
+                if (_allTasks[i].EndTime != _allTasks[i + 1].StartTime)
+                {
+                    var freeTask = new Task(freeTimeCategory,
+                                            _allTasks[i].EndTime,
+                                            _allTasks[i + 1].StartTime);
+
+                    if (freeTask.HasValidTimes) 
+                    { 
+                        freeTimeTasks.Add(freeTask);
+                    }
+                }
+            }
+
+            _allTasks.AddRange(freeTimeTasks);
+            _allTasks = _allTasks.OrderBy(task => task.StartTime).ToList();
+        }
 
         private IEnumerator Start()
         {
             while (Application.isPlaying) 
             { 
-                yield return new WaitForSecondsRealtime(_tickIntervalSeconds);
-                foreach (var taskView in _activeTaskViews) 
-                {
-                    taskView.AlignRectToNow(_nowMarkerRectTransform.anchoredPosition.y);
-                }
+                yield return new WaitForSecondsRealtime(_updateIntervalSeconds);
+                UpdateVisibleTasks();
+                AlignToNowMarker();
+            }
+        }
 
-                // TODO: destroy task that goes above screen
-                // TODO: spawn as many tasks as it takes to cover the screen height
+        private List<Task> GetOnScreenTasks()
+        {
+            List<Task> onScreenTasks = new List<Task>();
+
+            float totalScreenMinutesCovered = Screen.height / _unitsPerMinute;
+            float screenMinutesAboveNowMarker = (_nowMarkerRectTransform.position.y / _unitsPerMinute);
+            float screenMinutesBelowNowMarker = totalScreenMinutesCovered - screenMinutesAboveNowMarker;
+            DateTime screenTopTime = DateTime.Now - TimeSpan.FromMinutes(screenMinutesAboveNowMarker);
+            DateTime screenBottomTime = DateTime.Now + TimeSpan.FromMinutes(screenMinutesBelowNowMarker);
+
+            Task topTask = _allTasks.FirstOrDefault(task => task.Intersects(screenTopTime));
+            Task bottomTask = _allTasks.FirstOrDefault(task => task.Intersects(screenBottomTime));
+
+            for (int i = _allTasks.IndexOf(topTask); i <= _allTasks.IndexOf(bottomTask); ++i)
+            {
+                onScreenTasks.Add(_allTasks[i]);
+            }
+
+            return onScreenTasks;
+        }
+
+
+        private void AlignToNowMarker()
+        {
+            // the first task is anchored at the top of the content rect
+            float contentRectOffsetFromNowTarget = (float)(DateTime.Now - _activeTaskViews[0].StartTime).TotalMinutes * _unitsPerMinute;
+            float contentRectOffsetFromNowCurrent = _nowMarkerRectTransform.localPosition.y - _tasksContentRectTransform.localPosition.y;
+            float contentRectAdjustment = contentRectOffsetFromNowTarget - contentRectOffsetFromNowCurrent;
+
+            Vector2 contentPosition = _tasksContentRectTransform.anchoredPosition;
+            contentPosition.y += contentRectAdjustment;
+            _tasksContentRectTransform.anchoredPosition = contentPosition;
+        }
+
+        private void UpdateVisibleTasks()
+        { 
+            var onScreenTasks = GetOnScreenTasks();
+
+            // remove off-screen tasks
+            for (int i = 0; i < _activeTaskViews.Count; ++i)
+            {
+                if (!onScreenTasks.Contains(_activeTaskViews[i].Task))
+                {
+                    Destroy(_activeTaskViews[i].gameObject);
+                    _activeTaskViews[i] = null;
+                }
+            }
+
+            _activeTaskViews.RemoveAll(taskView => taskView == null);
+
+            // create missing on-screen tasks (in sorted order)
+            foreach (Task task in onScreenTasks) 
+            {
+                if (_activeTaskViews.FirstOrDefault(taskView => taskView.Task == task) == null)
+                {
+                    TaskView newTaskView = Instantiate(_taskViewPrefab, _tasksContentRectTransform);
+                    newTaskView.Initialize(task, _unitsPerMinute);
+                    _activeTaskViews.Add(newTaskView);
+                }
             }
         }
 

@@ -1,15 +1,22 @@
 namespace Freehill.DailyScheduleApp
 {
+    public class TaskCategory
+    { 
+        public string Name      { get; set; } // "Game Dev Work"
+        public string ColorHex  { get; set; } // "FF00FF"
+        public string Notes     { get; set; } // "Jira, Confluence, Git, Meetups (tue|wed|thu)"
+    }
+
     public class TaskJSON
     {
-        public string TaskName  { get; set; } // "Work" or "Sleep"
-        public string StartTime { get; set; } // "WED 9:00 AM" or "WED 11:00 PM"
-        public string EndTime   { get; set; } // "WED 5:00 PM" or "THU 8:00 AM"
-        public string ColorHEX  { get; set; } // "FF00FF"
+        public string Category  { get; set; } // "Game Dev Work"
+        public string StartTime { get; set; } // "Wednesday 9:00 AM"
+        public string EndTime   { get; set; } // "Wednesday 5:00 PM"
     }
 
     public class DailySchedule
-    { 
-        public TaskJSON[] taskJSONs { get; set; }
+    {
+        public TaskCategory[] TaskCategories { get; set; }
+        public TaskJSON[] DailyTasks         { get; set; }
     }
 }

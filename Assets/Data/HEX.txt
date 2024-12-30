@@ -1,0 +1,17 @@
+https://www.google.com/search?client=firefox-b-1-d&q=color+hex
+
+GOLD: d9a30f (cook)
+HOT BLUE: 0fd9b7 (water plants)
+DARK GREEN: 007d19 (exercise)
+ORANGE: ff8000 (game dev, read dev)
+BROWN: 913f04 (eat)
+DARK BLUE: 053df5 (dishes, laundry, trash)
+
+DARK GRAY: 303030 (morning prep)
+BRIGHT YELLOW: faf605 (quick breakfast)
+BRIGHT RED: fa2605 (commute)
+MAROON: a3416a (work)
+PURPLE: 6041a3 (hebrew)
+TURQUOISE: 4190a3 (read with dassa)
+DEEP GOLD: 664d08 (pick meals)
+DARK GOLD: a17a0e (grocery shop)
