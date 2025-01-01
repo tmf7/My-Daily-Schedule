@@ -2,32 +2,67 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using UnityEngine;
+
+using System.Globalization;
+using TMPro;
 
 namespace Freehill.DailyScheduleApp
 {
     public class TaskManager : MonoBehaviour
     {
+        [SerializeField] private TextAsset _dailyScheduleJSON;
         [SerializeField] private TaskView _taskViewPrefab;
         [SerializeField] private RectTransform _tasksContentRectTransform;
         [SerializeField] private RectTransform _nowMarkerRectTransform;
+        [SerializeField] private TMP_Text _currentTask;
+        [SerializeField] private TMP_Text _currentTaskNotes;
         [SerializeField] private float _updateIntervalSeconds = 1.0f;
         [SerializeField] private float _unitsPerMinute = 1.5f;
 
         private List<Task> _allTasks = new List<Task>();
         private List<TaskView> _activeTaskViews = new List<TaskView>();
+        private Coroutine _taskViewAnimation = null;
 
-        private const string DAILY_SCHEDULE_FILENAME = "MyDailySchedule.json";
+        private CultureInfo _culture = new CultureInfo("en-US");
+
         private const string FREE_TIME_CATEGORY = "Free Time";
 
         private void Awake()
         {
-            string dailySchedulePath = Path.Combine(Application.persistentDataPath, DAILY_SCHEDULE_FILENAME);
-            string fileJson = File.ReadAllText(dailySchedulePath);
-            var dailySchedule = JsonUtility.FromJson<DailySchedule>(fileJson);
-
+            // TODO(~): to avoid the need to rebuild when updating the TextAsset, instead use AddressableReference and load from a URL,
+            // alternatively read a google sheet directly and parse that
+            var dailySchedule = JsonUtility.FromJson<DailySchedule>(_dailyScheduleJSON.text);
+            dailySchedule.FixupTaskTimes();
+            ClearTasks();
             FillTasks(dailySchedule);
+            _taskViewAnimation = StartCoroutine(AnimateTaskScroll());
+        }
+
+        private void OnApplicationFocus(bool focus)
+        {
+            if (focus)
+            {
+                if (_taskViewAnimation != null)
+                {
+                    StopCoroutine(_taskViewAnimation);
+                }
+
+                _taskViewAnimation = StartCoroutine(AnimateTaskScroll());
+            }
+            else
+            {
+                Application.runInBackground = false; // don't waste battery
+            }
+        }
+
+        private void ClearTasks()
+        {
+            while(_tasksContentRectTransform.childCount > 0) 
+            {
+                Destroy(_tasksContentRectTransform.GetChild(0));
+            }
+            _activeTaskViews.Clear();
         }
 
         /// <summary> Enforces task order by StartTime, and fills gaps in schedule with "Free Time" tasks to avoid view discontinuities </summary>
@@ -77,7 +112,7 @@ namespace Freehill.DailyScheduleApp
             _allTasks = _allTasks.OrderBy(task => task.StartTime).ToList();
         }
 
-        private IEnumerator Start()
+        private IEnumerator AnimateTaskScroll()
         {
             while (Application.isPlaying) 
             { 
@@ -108,17 +143,16 @@ namespace Freehill.DailyScheduleApp
             return onScreenTasks;
         }
 
-
         private void AlignToNowMarker()
         {
             // the first task is anchored at the top of the content rect
-            float contentRectOffsetFromNowTarget = (float)(DateTime.Now - _activeTaskViews[0].StartTime).TotalMinutes * _unitsPerMinute;
-            float contentRectOffsetFromNowCurrent = _nowMarkerRectTransform.localPosition.y - _tasksContentRectTransform.localPosition.y;
-            float contentRectAdjustment = contentRectOffsetFromNowTarget - contentRectOffsetFromNowCurrent;
+            float firstTaskToNowMinutes = (float)(_activeTaskViews[0].StartTime - DateTime.Now).TotalMinutes;
+            float contentToNowRectMinutes = (_nowMarkerRectTransform.localPosition.y - _tasksContentRectTransform.localPosition.y) / _unitsPerMinute;
+            float minutesOffset = contentToNowRectMinutes - firstTaskToNowMinutes;
 
-            Vector2 contentPosition = _tasksContentRectTransform.anchoredPosition;
-            contentPosition.y += contentRectAdjustment;
-            _tasksContentRectTransform.anchoredPosition = contentPosition;
+            Vector3 contentPosition = _tasksContentRectTransform.localPosition;
+            contentPosition.y += (minutesOffset * _unitsPerMinute);
+            _tasksContentRectTransform.localPosition = contentPosition;
         }
 
         private void UpdateVisibleTasks()
@@ -147,14 +181,10 @@ namespace Freehill.DailyScheduleApp
                     _activeTaskViews.Add(newTaskView);
                 }
             }
-        }
 
-        private void OnApplicationFocus(bool focus)
-        {
-            if (!focus) 
-            { 
-                Application.runInBackground = false; // don't waste battery
-            }
+            Task currentTask = onScreenTasks.FirstOrDefault(task => task.Intersects(DateTime.Now));
+            _currentTask.text = currentTask.Category;
+            _currentTaskNotes.text = currentTask.Notes;
         }
     }
 }

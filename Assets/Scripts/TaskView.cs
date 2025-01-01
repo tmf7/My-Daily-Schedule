@@ -9,7 +9,6 @@ namespace Freehill.DailyScheduleApp
     public class TaskView : MonoBehaviour
     {
         [SerializeField] private TMP_Text _taskName;
-        [SerializeField] private TMP_Text _taskNotes;
 
         private Image _taskBackground;
         private LayoutElement _taskLayout;
@@ -28,7 +27,6 @@ namespace Freehill.DailyScheduleApp
         {
             _task = task;
             _taskName.text = _task.Category;
-            _taskNotes.text = _task.Notes;
             _taskBackground.color = _task.Color;
             _taskLayout.preferredHeight = _task.DurationMinutes * unitsPerMinute;
         }
